@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 class frame_mse(nn.Module):
     def __init__(self):
-        super(frame_mse_noweight, self).__init__()
+        super(frame_mse, self).__init__()
 
     def forward(self, y_pred, y_true): #(B,1,T) (B)
         y_pred = y_pred.squeeze(1) #(B,T)
