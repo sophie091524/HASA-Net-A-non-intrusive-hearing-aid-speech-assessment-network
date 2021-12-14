@@ -1,0 +1,31 @@
+# train or test
+Train: False
+seed: 999
+batch_size: 1
+num_workers: 16
+optim: 'RMSprop' 
+loss: 'MSELoss'
+frameloss: 'frame_mse'
+#
+whaspi: 1.5
+#
+logmag: False
+# train & validation set
+# model options
+model: BLSTM_frame_sig_att
+input_size: 263
+hidden_size: 100
+num_layers: 1
+dropout: 0 
+linear_output: 128 
+act_fn: 'relu'
+
+# training options
+train_epoch: 400
+train_lr: 0.001
+train_patience: 15
+train_summaries_dir: '../src_new_fast/save_all_new/BLSTM_attnew/train/logs/'
+train_checkpoint_dir: '../src_new_fast/save_all_new/BLSTM_attnew/train/'
+
+# testing
+result_dir: '../src_new_fast/save_all_new/BLSTM_attnew/test/'
