@@ -6,7 +6,7 @@ In this study, we propose a novel DNN-based end to-end, non-intrusive hearing ai
 ## Major Contribution
 HASA-Net represents the first step towards an end-to-end, non-intrusive unified model for listeners with hearing aids that simultaneously measures quality and intelligibility.
 
-<img src="https://github.com/sophie091524/HASA-Net-A-non-intrusive-hearing-aid-speech-assessment-network/blob/main/pic/hasanet.PNG" width="%">
+<img src="https://github.com/sophie091524/HASA-Net-A-non-intrusive-hearing-aid-speech-assessment-network/blob/main/pic/hasanet.PNG" width="40%">
 
 For more details and evaluation results, please check out our [paper](https://arxiv.org/pdf/2111.05691.pdf).
 
