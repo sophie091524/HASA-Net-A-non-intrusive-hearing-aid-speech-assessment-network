@@ -1,5 +1,5 @@
 # train or test
-Train: False
+Train: True
 seed: 999
 batch_size: 1
 num_workers: 16
@@ -24,8 +24,8 @@ act_fn: 'relu'
 train_epoch: 400
 train_lr: 0.001
 train_patience: 15
-train_summaries_dir: '../src_new_fast/save_all_new/BLSTM_attnew/train/logs/'
-train_checkpoint_dir: '../src_new_fast/save_all_new/BLSTM_attnew/train/'
+train_summaries_dir: '../src/save/BLSTM_att/train/logs/'
+train_checkpoint_dir: '../src/save/BLSTM_att/train/'
 
 # testing
-result_dir: '../src_new_fast/save_all_new/BLSTM_attnew/test/'
+result_dir: '../src/save/BLSTM_att/test/'
