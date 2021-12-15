@@ -51,7 +51,6 @@ def main(config_path):
     
     if args.Train:           
         df_train, df_valid = get_trainfile(), get_validfile()
-        #df_train, df_valid = df_train.iloc[0:500], df_valid.iloc[0:500]
         print(f'Train length:{len(df_train)}, Valid length:{len(df_valid)}')
         train_data = Dataset_train(df_train)
         valid_data = Dataset_test(df_valid)
