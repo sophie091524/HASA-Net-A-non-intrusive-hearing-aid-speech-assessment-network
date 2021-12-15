@@ -50,11 +50,6 @@ def train(model, train_loader, valid_loader, args):
             hl = hl.cuda(non_blocking=True)
             HASQIscore = HASQIscore.cuda(non_blocking=True)
             HASPIscore = HASPIscore.cuda(non_blocking=True)
-            #print(HASQIscore.size())
-            #stft = STFT(filter_length=512, hop_length=256, win_length=512, window='hamming').cuda()
-            #mag_data, phase_data = stft.transform(data)
-            #if args.logmag:
-            #    mad_data = torch.log1p(mag_data)
             optimizer.zero_grad()
             hasqi_fram, haspi_fram, hasqi_avg, haspi_avg = model(Sxx_data, hl) #(B)
             hasqi_loss_fram = frame(hasqi_fram, HASQIscore) #(B,1,T) (B)
@@ -154,17 +149,10 @@ def evaluate(model, valid_loader, epoch, args):
         valid_loss, valid_hasqi, valid_haspi = 0, 0, 0
         valid_hasqi_fram, valid_hasqi_avg, valid_haspi_fram, valid_haspi_avg = 0,0,0,0
         for step, (name, Sxx_ref, Sxx_data, hl, HASQIscore, HASPIscore, hltype) in enumerate(valid_loader):
-            #print(name,hltype)
-            #name = name.cuda(non_blocking=True) #'list' object has no attribute 'cuda'
             Sxx_data = Sxx_data.cuda(non_blocking=True)
             hl = hl.cuda(non_blocking=True)
             HASQIscore = HASQIscore.cuda(non_blocking=True)
             HASPIscore = HASPIscore.cuda(non_blocking=True)
-            #hltype = hltype.cuda(non_blocking=True) #'list' object has no attribute 'cuda'
-            #stft = STFT(filter_length=512, hop_length=256, win_length=512, window='hamming').cuda()
-            #mag_data, phase_data = stft.transform(data)
-            #if args.logmag:
-            #    mad_data = torch.log1p(mag_data)
             hasqi_fram, haspi_fram, hasqi_avg, haspi_avg = model(Sxx_data, hl) #(B)
             hasqi_loss_fram = frame(hasqi_fram, HASQIscore) #(B,1,T) (B)
             haspi_loss_fram = frame(haspi_fram, HASPIscore) #(B,1,T) (B)
@@ -179,14 +167,13 @@ def evaluate(model, valid_loader, epoch, args):
             valid_haspi+= args.whaspi*(haspi_loss_fram.item()+haspi_loss_avg.item())
             valid_loss+=(hasqi_loss_fram.item()+hasqi_loss_avg.item())+\
                          args.whaspi*(haspi_loss_fram.item()+haspi_loss_avg.item())
-            #print(f'valid_loss:{valid_loss}')
+         
             hasqi_score, predict_hasqi_score= HASQIscore.cpu().numpy(), hasqi_avg.squeeze(1).cpu().numpy()
             haspi_score, predict_haspi_score= HASPIscore.cpu().numpy(), haspi_avg.squeeze(1).cpu().numpy()
             
             for i,j,k,l,m,n,o in zip(name,hasqi_score,predict_hasqi_score,haspi_score, predict_haspi_score,hltype,hl.cpu().numpy()):
-                #print(i,j,k,l,m)
-                #print(j,k)
                 print(i,j,k,l,m,n,o, sep=',',file=output_file) 
+        
         output_file.close()
         epoch_valid_loss = valid_loss/len(valid_loader) 
         epoch_valid_hasqi = valid_hasqi/len(valid_loader) 
@@ -226,7 +213,6 @@ def evaluate(model, valid_loader, epoch, args):
         axs[1].set_title(f'LCC:{Pearson_cc2:5f},SRCC:{srcc2:5f}')
         # we obtain the average Pearson_cc    
         Pearson_cc = (Pearson_cc1+Pearson_cc2)*0.5
-        # If you don't do tight_layout() you'll have weird overlaps
         plt.tight_layout()
         plt.savefig(f'{args.train_checkpoint_dir}scatter.png')
     torch.cuda.empty_cache()
@@ -252,19 +238,12 @@ def test(model, test_loader, mode, args):
     print(len(test_loader))
     
     with torch.no_grad():          
-        #pbar = tqdm(total=total_steps)
-        #pbar.n = 0 
         test_loss, test_hasqi, test_haspi = 0, 0, 0
         for step, (name, Sxx_ref, Sxx_data, hl, HASQIscore, HASPIscore, hltype) in enumerate(test_loader):
             Sxx_data = Sxx_data.cuda(non_blocking=True)
             hl = hl.cuda(non_blocking=True)
             HASQIscore = HASQIscore.cuda(non_blocking=True)
             HASPIscore = HASPIscore.cuda(non_blocking=True)
-            #stft = STFT(filter_length=512, hop_length=256, win_length=512, window='hamming').cuda()
-            #mag_data, phase_data = stft.transform(data)
-            #if args.logmag:
-            #    mad_data = torch.log1p(mag_data)
-            #print(mag.size()) #(B,F,T)
             hasqi_fram, haspi_fram, hasqi_avg, haspi_avg = model(Sxx_data, hl) #(B)
             hasqi_loss_fram = frame(hasqi_fram, HASQIscore) #(B,1,T) (B)
             haspi_loss_fram = frame(haspi_fram, HASPIscore) #(B,1,T) (B)
@@ -282,9 +261,6 @@ def test(model, test_loader, mode, args):
             
             for i,j,k,l,m,n,o in zip(name,hasqi_score,predict_hasqi_score,haspi_score, predict_haspi_score,hltype,hl.cpu().numpy()):
                 print(i,j,k,l,m,n,o, sep=',',file=output_file) 
-            
-            #print(f'GT HASQI:{hasqi_score}, Predict:{predict_hasqi_score}')  
-            #print(f'GT HASPI:{haspi_score}, Predict:{predict_haspi_score}')  
         output_file.close()
         
         test_total_loss = test_loss/len(test_loader) 
@@ -320,7 +296,6 @@ def test(model, test_loader, mode, args):
         axs[1].set_title(f'LCC:{Pearson_cc2:5f},SRCC:{srcc2:5f}')
         # we obtain the average Pearson_cc    
         Pearson_cc = (Pearson_cc1+Pearson_cc2)*0.5
-        # If you don't do tight_layout() you'll have weird overlaps
         plt.tight_layout()
         plt.savefig(f'{args.result_dir}scatter_{mode}.png')
         plt.close()
