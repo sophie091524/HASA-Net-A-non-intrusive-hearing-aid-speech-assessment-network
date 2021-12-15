@@ -16,7 +16,8 @@ def load_csvfile(csvfile, mode):
     return merged_df
 
 def get_trainfile():
-    filepath = ['../Merge_new/train_flat.csv','../Merge_new/train_sloping.csv','../Merge_new/train_rising.csv',               '../Merge_new/train_cookiebite.csv','../Merge_new/train_noisenotched.csv','../Merge_new/train_highfrequency.csv']
+    filepath = ['../Merge_new/train_flat.csv','../Merge_new/train_sloping.csv','../Merge_new/train_rising.csv',
+                '../Merge_new/train_cookiebite.csv','../Merge_new/train_noisenotched.csv','../Merge_new/train_highfrequency.csv']
     df = load_csvfile(filepath, 'train')
     return df 
     
