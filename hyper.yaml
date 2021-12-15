@@ -1,17 +1,13 @@
-# train or test
-Train: True
+Train: True # train or test
 seed: 999
 batch_size: 1
 num_workers: 16
 optim: 'RMSprop' 
 loss: 'MSELoss'
 frameloss: 'frame_mse'
-#
 whaspi: 1.5
-#
 logmag: False
-# train & validation set
-# model options
+
 model: BLSTM_frame_sig_att
 input_size: 263
 hidden_size: 100
