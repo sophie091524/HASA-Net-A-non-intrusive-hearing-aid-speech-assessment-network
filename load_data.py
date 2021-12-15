@@ -96,33 +96,3 @@ class Dataset_test(Dataset):
     def __len__(self):
         return len(self.data_list)
     
-if __name__ == '__main__':     
-    batch_size = 1
-    num_workers = 8
-    import pandas as pd
-    import torch
-    from torch_stft import STFT
-    valid_filepath = '../Merge/train_rising.csv'
-    
-    df = pd.read_csv(valid_filepath)
-    df = df.iloc[0:5]
-    print(len(df))
-    valid_data = HASQI_train(df)
-    valid_loader = DataLoader(valid_data, batch_size=batch_size, shuffle=False, num_workers=num_workers)
-     
-    for step , (ref, data, hl, score) in enumerate(valid_loader):
-        stft = STFT(filter_length=512, hop_length=256, win_length=512, window='hamming')
-        mag_data, phase_data = stft.transform(ref)
-        print(mag_data.size(),hl.size(), score.size()) #(B,F,T), (B,6), (B)
-        #p.ndarray [shape=(d, t)] or None
-        #librosa.feature.rms(y=None, S=None, frame_length=2048, hop_length=512, center=True, pad_mode='reflect')
-        spetrum = mag_data.squeeze(0).cpu().numpy()
-        #rms = librosa.feature.rms(S=spetrum,frame_length=512, hop_length=256)[0]
-        #print(rms)
-        #print(len(spetrum[0]))
-        #print(len(rms[0]))
-        #times = librosa.frames_to_time(np.arange(len(rms)))
-
-        #frame_mask = torch.zeros(mag_data.size(0), mag_data.size(2))
-        #print(name, hltype)
-        
