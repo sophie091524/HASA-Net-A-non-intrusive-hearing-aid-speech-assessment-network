@@ -33,15 +33,15 @@ def make_spectrum(sig, feature_type=None, mode=None):
         Sxx = np.log10(Lp**2)
     else:
         Sxx = Lp
-    #print(f'initial:{Sxx.shape}')
+    
     if mode == 'mean_std':
         mean = np.mean(Sxx, axis=-1).reshape(Sxx.shape[0], 1)
         std = np.std(Sxx, axis=-1).reshape(Sxx.shape[0], 1)+1e-12
         Sxx = (Sxx-mean)/std 
-        #print(f'shape:{Sxx.shape}')
+        
     elif mode == 'minmax':
         Sxx = 2 * (Sxx - _min)/(_max - _min) - 1
-    #print(f'after:{Sxx.shape}')
+    
     return Sxx
 
 class Dataset_train(Dataset):  
