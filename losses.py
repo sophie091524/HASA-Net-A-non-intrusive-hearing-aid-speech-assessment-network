@@ -10,7 +10,6 @@ class frame_mse(nn.Module):
         y_pred = y_pred.squeeze(1) #(B,T)
         B,T = y_pred.size()
         y_true_repeat = y_true.unsqueeze(1).repeat(1,T) #(B,T)
-        #print(f'y_pre:{y_pred.size()},y_true:{y_true_repeat.size()}') #(B,T) (B,T)
         loss = torch.mean((y_true_repeat - y_pred.detach()) ** 2)
         return loss
     
